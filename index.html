@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Markup vs Margin Calculator</title>
+    <title>Master Plumbers NZ - Markup vs Margin Calculator</title>
     <style>
         :root {
             --bg: #d0e0e3;
@@ -39,37 +39,31 @@
 
         .header {
             margin-bottom: 24px;
-            display: flex;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-areas:
+                "title logo"
+                "desc desc";
+            gap: 8px 16px;
             align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-
-        .header>div {
-            flex: 1 1 600px;
-            min-width: 280px;
         }
 
         .header h1 {
-            margin: 0 0 8px;
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            line-height: 1.1;
+            grid-area: title;
+            margin: 0;
         }
 
         .header p {
+            grid-area: desc;
             margin: 0;
-            color: var(--muted);
             max-width: 760px;
-            font-size: 1rem;
         }
 
         .logo {
-            height: 60px;
+            grid-area: logo;
+            height: 50px;
             width: auto;
             object-fit: contain;
-            flex-shrink: 0;
-            margin-right: 10px;
         }
 
         .grid {
@@ -247,14 +241,6 @@
             .grid {
                 grid-template-columns: 1fr;
             }
-            .header {
-                flex-wrap: nowrap;
-                align-items: center;
-            }
-
-            .logo {
-                height: 40px;
-            }
         }
 
         @media (max-width: 640px) {
@@ -272,14 +258,8 @@
                 padding: 16px;
             }
 
-            .header {
-                flex-wrap: nowrap;
-                align-items: center;
-            }
-
             .logo {
                 height: 32px;
-                vertical-align: top;
             }
         }
     </style>
@@ -288,18 +268,17 @@
 <body>
     <div class="wrap">
         <div class="header">
-            <div>
-                <h1>Markup vs Margin Calculator</h1>
-                <p>
-                    Calculator for testing price increases driven by higher PVC, freight, fuel, or other direct input
-                    costs.
-                    Choose a pricing method and compare the effect on sell price, markup, margin, and profit.
-                </p>
-            </div>
+            <h1>Markup vs Margin Calculator</h1>
             <img class="logo"
                 src="https://raw.githubusercontent.com/masterplumbersnz/Calculator/refs/heads/main/MPLogo.png"
                 alt="MP Logo" />
+            <p>
+                Calculator for testing price increases driven by higher PVC, freight, fuel, or other direct input
+                costs.
+                Choose a pricing method and compare the effect on sell price, markup, margin, and profit.
+            </p>
         </div>
+
 
         <div class="grid">
             <section class="card">
