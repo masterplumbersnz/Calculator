@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markup vs Margin Calculator</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #dbe3ee;
+      --accent: #0f766e;
+      --accent-soft: #e6fffb;
+      --warn: #92400e;
+      --warn-bg: #fff7ed;
+      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #f8fafc 0%, var(--bg) 100%);
+      color: var(--text);
+      padding: 32px 18px;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 24px;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      line-height: 1.1;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 760px;
+      font-size: 1rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .subline {
+      margin: 4px 0 0;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .card h2 {
+      margin: 0 0 16px;
+      font-size: 1.2rem;
+    }
+
+    .section-title {
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      color: var(--muted);
+      margin: 20px 0 10px;
+      text-transform: uppercase;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.35;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font: inherit;
+      color: var(--text);
+      background: #fff;
+    }
+
+    input:focus, select:focus {
+      outline: 2px solid rgba(15, 118, 110, 0.15);
+      border-color: var(--accent);
+    }
+
+    .mode-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .stat .k {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat .v {
+      font-size: 1.35rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #ecfeff 0%, #f8fafc 100%);
+      border: 1px solid #cdeeed;
+    }
+
+    .hero .v {
+      font-size: 2rem;
+      color: var(--accent);
+    }
+
+    .compare {
+      margin-top: 14px;
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 0.95rem;
+    }
+
+    .compare th, .compare td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: left;
+    }
+
+    .compare th {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--warn-bg);
+      color: var(--warn);
+      border: 1px solid #fed7aa;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .explanation {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--accent-soft);
+      border: 1px solid #b7f0ea;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .fields, .stats { grid-template-columns: 1fr; }
+      body { padding: 18px 12px; }
+      .card { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <h1>Markup vs Margin Calculator</h1>
+      <p>
+        Quick prototype for testing price increases driven by higher PVC, freight, fuel, or other direct input costs.
+        Choose a pricing method and compare the effect on sell price, markup, margin, and profit.
+      </p>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <h2>Inputs</h2>
+
+        <div class="section-title">Original pricing</div>
+        <div class="fields">
+          <div class="field">
+            <label for="originalSell">Original sell price</label>
+            <p class="subline">The price the job was orignally quoted at.</p>
+            <input id="originalSell" type="number" min="0" step="0.01" value="10000" />
+          </div>
+          <div class="field">
+            <label for="originalMaterial">Original material cost</label>
+            <p class="subline">The cost of materials in the original quote.</p>
+            <input id="originalMaterial" type="number" min="0" step="0.01" value="4500" />
+          </div>
+          <div class="field">
+            <label for="labour">Labour cost</label>
+            <p class="subline">The cost of labour in the original quote.</p>
+            <input id="labour" type="number" min="0" step="0.01" value="2200" />
+          </div>
+          <div class="field">
+            <label for="other">Other direct costs</label>
+            <p class="subline">Other direct costs in the original quote.</p>
+            <input id="other" type="number" min="0" step="0.01" value="800" />
+          </div>
+          <div class="field full">
+            <div class="hint">Original total cost is calculated as original material + labour + other direct costs.</div>
+          </div>
+        </div>
+
+        <div class="section-title">Updated costs</div>
+        <div class="fields">
+          <div class="field">
+            <label for="newMaterial">New material cost</label>
+            <p class="subline">The updated cost of materials reflecting supplier increases.</p>
+            <input id="newMaterial" type="number" min="0" step="0.01" value="5300" />
+          </div>
+          <div class="field">
+            <label for="fuel">Fuel / freight increase</label>
+            <p class="subline">Additional fuel, freight, or delivery-related costs not in the original quote.</p>
+            <input id="fuel" type="number" min="0" step="0.01" value="100" />
+          </div>
+        </div>
+
+        <div class="section-title">Pricing method</div>
+        <div class="mode-box">
+          <div class="fields">
+            <div class="field full">
+              <label for="mode">Mode</label>
+              <select id="mode">
+                <option value="recover">Recover added cost only</option>
+                <option value="profit">Maintain original dollar profit</option>
+                <option value="margin" selected>Maintain original margin %</option>
+                <option value="markup">Apply target markup %</option>
+                <option value="targetMargin">Apply target margin %</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="targetMarkup">Target markup %</label>
+              <input id="targetMarkup" type="number" step="0.01" min="0" value="33.33" />
+            </div>
+            <div class="field">
+              <label for="targetMargin">Target margin %</label>
+              <input id="targetMargin" type="number" step="0.01" min="0" max="99.99" value="25" />
+            </div>
+            <div class="field full">
+              <div class="hint">Markup is based on cost. Margin is based on sell price.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Results</h2>
+
+        <div class="stats">
+          <div class="stat hero">
+            <div class="k">Recommended new sell price</div>
+            <div class="v" id="recommendedPrice">$0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Cost increase</div>
+            <div class="v" id="costIncrease">$0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">Original total cost</div>
+            <div class="v" id="originalCost">$0.00</div>
+          </div>
+          <div class="stat">
+            <div class="k">New total cost</div>
+            <div class="v" id="newCost">$0.00</div>
+          </div>
+        </div>
+
+        <table class="compare">
+          <thead>
+            <tr>
+              <th>Measure</th>
+              <th>Original</th>
+              <th>New</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Gross profit</td>
+              <td id="originalProfit"></td>
+              <td id="newProfit"></td>
+            </tr>
+            <tr>
+              <td>Markup %</td>
+              <td id="originalMarkup"></td>
+              <td id="newMarkup"></td>
+            </tr>
+            <tr>
+              <td>Margin %</td>
+              <td id="originalMargin"></td>
+              <td id="newMargin"></td>
+            </tr>
+            <tr>
+              <td>Sell price change</td>
+              <td>—</td>
+              <td id="sellChange"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="explanation" id="explanation"></div>
+
+        <div class="notice">
+          Pricing guidance only. For existing contracted work, any increase may still depend on contract terms,
+          customer approval, or an agreed variation.
+        </div>
+
+        <div class="footer-note">
+          Prototype only. Currency format is generic and can be swapped to NZD formatting or tied into your branding later.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const fields = [
+      'originalSell', 'originalMaterial', 'labour', 'other',
+      'newMaterial', 'fuel', 'mode', 'targetMarkup', 'targetMargin'
+    ];
+
+    fields.forEach((id) => $(id).addEventListener('input', calculate));
+    $('mode').addEventListener('change', calculate);
+
+    function num(id) {
+      const value = parseFloat($(id).value);
+      return Number.isFinite(value) ? value : 0;
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat('en-NZ', {
+        style: 'currency',
+        currency: 'NZD',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value || 0);
+    }
+
+    function pct(value) {
+      return `${(value * 100).toFixed(2)}%`;
+    }
+
+    function safeDivide(a, b) {
+      return b === 0 ? 0 : a / b;
+    }
+
+    function calculate() {
+      const originalSell = num('originalSell');
+      const originalMaterial = num('originalMaterial');
+      const labour = num('labour');
+      const other = num('other');
+      const newMaterial = num('newMaterial');
+      const fuel = num('fuel');
+      const mode = $('mode').value;
+      const targetMarkup = num('targetMarkup') / 100;
+      const targetMargin = num('targetMargin') / 100;
+
+      const originalCost = originalMaterial + labour + other;
+      const newCost = newMaterial + labour + other + fuel;
+      const costIncrease = newCost - originalCost;
+
+      const originalProfit = originalSell - originalCost;
+      const originalMarkup = safeDivide(originalProfit, originalCost);
+      const originalMargin = safeDivide(originalProfit, originalSell);
+
+      let newSell = originalSell;
+
+      switch (mode) {
+        case 'recover':
+          newSell = originalSell + costIncrease;
+          break;
+        case 'profit':
+          newSell = newCost + originalProfit;
+          break;
+        case 'margin':
+          newSell = originalMargin >= 1 ? newCost : newCost / (1 - originalMargin);
+          break;
+        case 'markup':
+          newSell = newCost * (1 + targetMarkup);
+          break;
+        case 'targetMargin':
+          newSell = targetMargin >= 1 ? 0 : newCost / (1 - targetMargin);
+          break;
+      }
+
+      const newProfit = newSell - newCost;
+      const newMarkup = safeDivide(newProfit, newCost);
+      const newMargin = safeDivide(newProfit, newSell);
+      const sellChange = newSell - originalSell;
+
+      $('recommendedPrice').textContent = money(newSell);
+      $('costIncrease').textContent = money(costIncrease);
+      $('originalCost').textContent = money(originalCost);
+      $('newCost').textContent = money(newCost);
+      $('originalProfit').textContent = money(originalProfit);
+      $('newProfit').textContent = money(newProfit);
+      $('originalMarkup').textContent = pct(originalMarkup);
+      $('newMarkup').textContent = pct(newMarkup);
+      $('originalMargin').textContent = pct(originalMargin);
+      $('newMargin').textContent = pct(newMargin);
+      $('sellChange').textContent = `${money(sellChange)} (${originalSell ? ((sellChange / originalSell) * 100).toFixed(2) : '0.00'}%)`;
+
+      const modeLabel = {
+        recover: 'recover the added cost only',
+        profit: 'maintain the original dollar profit',
+        margin: 'maintain the original margin percentage',
+        markup: 'apply the target markup percentage',
+        targetMargin: 'apply the target margin percentage'
+      }[mode];
+
+      $('explanation').textContent =
+        `Original total cost was ${money(originalCost)} and has increased to ${money(newCost)}, a change of ${money(costIncrease)}. ` +
+        `Using the selected method to ${modeLabel}, the revised sell price is ${money(newSell)}. ` +
+        `That results in a gross profit of ${money(newProfit)}, a markup of ${pct(newMarkup)}, and a margin of ${pct(newMargin)}.`;
+    }
+
+    calculate();
+  </script>
+  <script>
+    // --- Inline help tooltips ---
+    const tooltips = {
+      originalSell: "The price you originally quoted the customer for the job.",
+      originalMaterial: "Material cost at the time of quoting (e.g. pipes, fittings, fixtures).",
+      labour: "Total labour cost for completing the job.",
+      other: "Any other direct costs such as subcontractors or equipment hire.",
+      newMaterial: "Updated material cost reflecting supplier increases.",
+      fuel: "Additional delivery, freight, or fuel-related costs.",
+      mode: "Choose how you want to adjust your pricing based on the new costs.",
+      targetMarkup: "Markup is calculated on cost. Example: 33.33% markup ≈ 25% margin.",
+      targetMargin: "Margin is calculated on sell price. Example: 25% margin ≈ 33.33% markup."
+    };
+
+    function addTooltips() {
+      Object.keys(tooltips).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const label = document.querySelector(`label[for="${id}"]`);
+        if (!label) return;
+
+        const info = document.createElement('span');
+        info.textContent = ' ⓘ';
+        info.style.cursor = 'help';
+        info.style.color = '#0f766e';
+        info.title = tooltips[id];
+
+        label.appendChild(info);
+      });
+    }
+
+    addTooltips();
+  </script>
+</body>
+</html>
